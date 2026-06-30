@@ -42,7 +42,7 @@
   }
   .wrap{max-width:560px;margin:0 auto;padding:0 16px 48px;min-height:100dvh}
 
-  /* Header — PBC blue bar */
+  /* Header: PBC blue bar */
   header{
     position:sticky;top:0;z-index:10;
     background:var(--blue);
@@ -140,7 +140,7 @@
   .tip{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 13px}
   .tip b{color:var(--ink);font-weight:700}
 
-  /* Free-class CTA — brand pill */
+  /* Free-class CTA: brand pill */
   .cta{display:block;text-decoration:none;color:var(--ink);margin-top:20px;
     background:linear-gradient(135deg,#ffffff,var(--blue-soft));
     border:1px solid #d4e3ff;border-radius:var(--radius);padding:17px 16px 16px;box-shadow:var(--shadow-sm);
@@ -182,7 +182,7 @@ const T = {
   en:{
     tagline:"Conversation topics",
     chooseLevel:"What's your level?",
-    levelSub:"Pick the one that feels right — you can change it any time.",
+    levelSub:"Pick the one that feels right. You can change it any time.",
     chooseTopic:"Choose a topic",
     topicSub:"Tap a topic to get questions for your conversation.",
     levels:{beginner:"Beginner",intermediate:"Intermediate",advanced:"Advanced"},
@@ -191,8 +191,8 @@ const T = {
     topicsBtn:"Topics",
     levelBtn:"Change level",
     qhint:"Ask your partner these questions and help them keep talking 🙌",
-    tip1:["💬","<b>It's a conversation, not a class.</b> Don't correct — just keep it flowing."],
-    tip2:["⏱️","<b>~30 min each language.</b> Swap to the other language when the host says."],
+    tip1:["💬","<b>It's a conversation, not a class.</b> Don't correct, just keep it flowing."],
+    tip2:["⏱️","<b>~30 min each language.</b> Switch language once 30 minutes have passed."],
     tip3:["🤝","<b>No right answers.</b> Pick the questions you like and skip the rest."],
     ctaTitle:"Want to learn even faster?",
     ctaSub:"If you'd like something more structured, try a free class with a professional PBC teacher.",
@@ -201,7 +201,7 @@ const T = {
   es:{
     tagline:"Temas de conversación",
     chooseLevel:"¿Cuál es tu nivel?",
-    levelSub:"Elige el que te encaje — puedes cambiarlo cuando quieras.",
+    levelSub:"Elige el que te encaje. Puedes cambiarlo cuando quieras.",
     chooseTopic:"Elige un tema",
     topicSub:"Toca un tema para ver preguntas para tu conversación.",
     levels:{beginner:"Principiante",intermediate:"Intermedio",advanced:"Avanzado"},
@@ -210,8 +210,8 @@ const T = {
     topicsBtn:"Temas",
     levelBtn:"Cambiar nivel",
     qhint:"Hazle estas preguntas a tu compañero/a y ayúdale a seguir hablando 🙌",
-    tip1:["💬","<b>Es una conversación, no una clase.</b> No corrijas — deja que fluya."],
-    tip2:["⏱️","<b>~30 min cada idioma.</b> Cambia al otro idioma cuando lo diga el anfitrión."],
+    tip1:["💬","<b>Es una conversación, no una clase.</b> No corrijas, deja que fluya."],
+    tip2:["⏱️","<b>~30 min cada idioma.</b> Cambia de idioma cuando hayan pasado 30 minutos."],
     tip3:["🤝","<b>No hay respuestas correctas.</b> Elige las preguntas que te gusten y salta el resto."],
     ctaTitle:"¿Quieres aprender aún más rápido?",
     ctaSub:"Si te apetece algo más estructurado, prueba una clase gratis con un profe profesional de PBC.",
@@ -239,7 +239,7 @@ const LEVELS=[
 const TOPICS=[
   {id:"ice",emoji:"👋",name:{en:"Break the ice",es:"Romper el hielo"},q:{
     beginner:{
-      en:["What's your name and where are you from?","How are you today?","What city do you live in?","Do you have any pets?","What do you do — work or study?","What's your favourite colour?"],
+      en:["What's your name and where are you from?","How are you today?","What city do you live in?","Do you have any pets?","What do you do, work or study?","What's your favourite colour?"],
       es:["¿Cómo te llamas y de dónde eres?","¿Cómo estás hoy?","¿En qué ciudad vives?","¿Tienes mascotas?","¿A qué te dedicas: trabajas o estudias?","¿Cuál es tu color favorito?"]},
     intermediate:{
       en:["Why are you learning this language?","What did you do last weekend?","What are you looking forward to this week?","How long have you been studying languages?","Tell me a fun fact about you.","If you had a free day tomorrow, what would you do?"],
@@ -250,7 +250,7 @@ const TOPICS=[
   }},
   {id:"travel",emoji:"✈️",name:{en:"Travel",es:"Viajes"},q:{
     beginner:{
-      en:["Do you like travelling?","What countries have you visited?","Do you prefer the beach or the mountains?","How do you like to travel — car, train or plane?","What's your favourite place in your country?","Where would you like to go on holiday?"],
+      en:["Do you like travelling?","What countries have you visited?","Do you prefer the beach or the mountains?","How do you like to travel: by car, train or plane?","What's your favourite place in your country?","Where would you like to go on holiday?"],
       es:["¿Te gusta viajar?","¿Qué países has visitado?","¿Prefieres la playa o la montaña?","¿Cómo te gusta viajar: en coche, tren o avión?","¿Cuál es tu lugar favorito de tu país?","¿A dónde te gustaría ir de vacaciones?"]},
     intermediate:{
       en:["What's the best trip you've ever taken?","Do you prefer planning everything or being spontaneous?","Tell me about a place that surprised you.","What's one thing you always pack?","Have you ever had a travel disaster? What happened?","Would you rather travel alone or with people?"],
