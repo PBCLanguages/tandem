@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0066ff" />
+<title>PBC Languages · Conversation topics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#f4f6f9;
+    --card:#ffffff;
+    --ink:#1c2430;
+    --muted:#667085;
+    --line:#e6e9f0;
+    --blue:#0066ff;
+    --blue-dark:#0052cc;
+    --blue-soft:#e7f0ff;
+    --yellow:#e8de21;
+    --yellow-soft:#fbf7c9;
+    --cyan:#02a9ca;
+    --cyan-soft:#dff5fa;
+    --radius:18px;
+    --shadow:0 10px 30px rgba(0,40,90,.10);
+    --shadow-sm:0 2px 10px rgba(0,40,90,.07);
+    --font:"Poppins",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:var(--font);
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:0 16px 48px;min-height:100dvh}
+
+  /* Header: PBC blue bar */
+  header{
+    position:sticky;top:0;z-index:10;
+    background:var(--blue);
+    margin:0 -16px 16px;
+    padding:12px 16px;
+    box-shadow:0 4px 16px rgba(0,60,150,.20);
+  }
+  .bar{display:flex;align-items:center;gap:12px}
+  .brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .logo{height:40px;width:auto;display:block;flex:none}
+  .tagline{
+    color:rgba(255,255,255,.92);font-size:12px;font-weight:600;line-height:1.15;
+    border-left:1px solid rgba(255,255,255,.4);padding-left:10px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+  }
+  @media(max-width:379px){.tagline{display:none}}
+
+  /* Language selector: row of flag chips */
+  .lang{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+  .lang button{
+    border:0;background:rgba(255,255,255,.16);font:inherit;font-weight:700;font-size:13px;
+    padding:7px 12px;border-radius:999px;color:#fff;opacity:.92;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;line-height:1
+  }
+  .lang button .fl{font-size:15px;line-height:1}
+  .lang button.on{background:var(--yellow);color:#222;opacity:1}
+
+  /* Screen transitions */
+  .screen{animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  h1.title{font-size:23px;margin:8px 2px 2px;letter-spacing:-.3px;font-weight:700}
+  p.sub{color:var(--muted);margin:0 2px 18px;font-size:14.5px}
+
+  /* Cards */
+  .grid{display:grid;gap:12px}
+  .grid.topics{grid-template-columns:1fr 1fr}
+  .card{
+    appearance:none;width:100%;text-align:left;font:inherit;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow-sm);transition:transform .08s ease,box-shadow .15s ease,border-color .15s ease;
+  }
+  .card:active{transform:scale(.985)}
+  .card:hover{box-shadow:var(--shadow);border-color:#cfd9ea}
+
+  /* Level cards */
+  .level{display:flex;align-items:center;gap:14px;padding:16px 16px}
+  .level .emoji{font-size:25px;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;flex:none}
+  .level.b .emoji{background:var(--cyan-soft)}
+  .level.i .emoji{background:var(--blue-soft)}
+  .level.a .emoji{background:var(--yellow-soft)}
+  .level .txt b{font-size:17px;display:block;font-weight:700}
+  .level .txt span{font-size:13px;color:var(--muted);font-weight:500}
+  .level .arrow{margin-left:auto;color:var(--blue);font-size:22px;flex:none;font-weight:700}
+
+  /* Topic cards */
+  .topic{padding:18px 12px;display:flex;flex-direction:column;align-items:flex-start;gap:9px;min-height:108px;justify-content:center}
+  .topic .emoji{font-size:30px}
+  .topic b{font-size:15px;line-height:1.2;font-weight:600}
+
+  /* Questions */
+  .qhead{
+    background:linear-gradient(120deg,var(--blue),var(--cyan));color:#fff;
+    border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px
+  }
+  .qhead .row{display:flex;align-items:center;gap:10px}
+  .qhead .ico{font-size:26px}
+  .qhead h2{margin:0;font-size:20px;letter-spacing:-.2px;font-weight:700}
+  .chip{display:inline-block;font-size:11.5px;font-weight:800;background:var(--yellow);color:#222;padding:4px 11px;border-radius:999px;margin-top:9px;text-transform:uppercase;letter-spacing:.5px}
+  .qhint{font-size:13px;color:var(--muted);margin:0 2px 12px;display:flex;gap:7px;align-items:flex-start}
+
+  ol.q{list-style:none;counter-reset:q;margin:0;padding:0;display:grid;gap:10px}
+  ol.q li{
+    counter-increment:q;background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:15px 16px 15px 52px;position:relative;font-size:16px;box-shadow:var(--shadow-sm)
+  }
+  ol.q li::before{
+    content:counter(q);position:absolute;left:12px;top:14px;
+    width:28px;height:28px;border-radius:9px;background:var(--blue-soft);color:var(--blue);
+    font-size:13px;font-weight:800;display:grid;place-items:center
+  }
+
+  /* Buttons / nav */
+  .backbtn{
+    appearance:none;border:0;background:transparent;font:inherit;font-weight:700;color:var(--blue);
+    cursor:pointer;padding:8px 4px;font-size:14.5px;display:inline-flex;align-items:center;gap:6px;margin:2px 0 8px
+  }
+  .footnav{display:flex;gap:10px;margin-top:20px}
+  .footnav button{
+    flex:1;appearance:none;font:inherit;font-weight:700;cursor:pointer;border-radius:13px;padding:13px;font-size:14.5px;
+    border:1px solid var(--line);background:#fff;color:var(--ink);box-shadow:var(--shadow-sm)
+  }
+  .footnav button.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+  /* Tips */
+  .tips{margin-top:24px;display:grid;gap:9px}
+  .tip{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+  .tip b{color:var(--ink);font-weight:700}
+
+  /* Free-class CTA: brand pill */
+  .cta{display:block;text-decoration:none;color:var(--ink);margin-top:22px;
+    background:linear-gradient(135deg,#ffffff,var(--blue-soft));
+    border:1px solid #d4e3ff;border-radius:var(--radius);padding:17px 16px 16px;box-shadow:var(--shadow-sm);
+    transition:transform .08s ease,box-shadow .15s ease}
+  .cta:active{transform:scale(.99)}
+  .cta:hover{box-shadow:var(--shadow)}
+  .cta .row{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .cta .ic{font-size:22px;flex:none}
+  .cta b{font-size:15.5px;letter-spacing:-.2px;font-weight:700}
+  .cta p{margin:0 0 13px;font-size:13px;color:var(--muted);line-height:1.45}
+  .cta .cta-btn{display:block;text-align:center;background:var(--yellow);color:#222;
+    font-weight:800;padding:13px;border-radius:100px;font-size:13px;text-transform:uppercase;letter-spacing:.8px;
+    box-shadow:0 4px 14px rgba(232,222,33,.5)}
+
+  footer{margin-top:26px;text-align:center;font-size:12px;color:#9aa3b5}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="bar">
+      <div class="brand">
+        <img class="logo" alt="PBC Languages"
+          src="data:image/png;base64,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" />
+        <span id="tagline" class="tagline">Conversation topics</span>
+      </div>
+    </div>
+    <div class="lang" id="langSel" role="group" aria-label="Language"></div>
+  </header>
+  <main id="app"></main>
+  <footer><span id="footText">PBC Languages</span></footer>
+</div>
+
+<script>
+/* ---------------- Languages ---------------- */
+const LANGS=[
+  {code:"es",flag:"🇪🇸",label:"ES"},
+  {code:"en",flag:"🇬🇧",label:"EN"},
+  {code:"fr",flag:"🇫🇷",label:"FR"},
+  {code:"de",flag:"🇩🇪",label:"DE"},
+  {code:"it",flag:"🇮🇹",label:"IT"}
+];
+const SUPPORTED=LANGS.map(l=>l.code);
+
+/* ---------------- UI strings ---------------- */
+const T = {
+  en:{
+    tagline:"Conversation topics",
+    chooseLevel:"What's your level?",
+    levelSub:"Pick the one that feels right. You can change it any time.",
+    chooseTopic:"Choose a topic",
+    topicSub:"Tap a topic to get questions for your conversation.",
+    levels:{beginner:"Beginner",intermediate:"Intermediate",advanced:"Advanced"},
+    levelDesc:{beginner:"Simple, everyday questions",intermediate:"Opinions and short stories",advanced:"Deep, open discussion"},
+    topicsBtn:"Topics",
+    levelBtn:"Change level",
+    qhint:"Ask your partner these questions and help them keep talking 🙌",
+    tip1:["💬","<b>It's a conversation, not a class.</b> Don't correct, just keep it flowing."],
+    tip2:["⏱️","<b>~30 min each language.</b> Switch language once 30 minutes have passed."],
+    tip3:["🤝","<b>No right answers.</b> Pick the questions you like and skip the rest."],
+    ctaTitle:"Want to learn even faster?",
+    ctaSub:"If you'd like something more structured, try a free class with a professional PBC teacher.",
+    ctaBtn:"Book your free class →",
+    footer:"PBC Languages · conversation practice"
+  },
+  es:{
+    tagline:"Temas de conversación",
+    chooseLevel:"¿Cuál es tu nivel?",
+    levelSub:"Elige el que te encaje. Puedes cambiarlo cuando quieras.",
+    chooseTopic:"Elige un tema",
+    topicSub:"Toca un tema para ver preguntas para tu conversación.",
+    levels:{beginner:"Principiante",intermediate:"Intermedio",advanced:"Avanzado"},
+    levelDesc:{beginner:"Preguntas sencillas del día a día",intermediate:"Opiniones y pequeñas historias",advanced:"Debate abierto y profundo"},
+    topicsBtn:"Temas",
+    levelBtn:"Cambiar nivel",
+    qhint:"Hazle estas preguntas a tu compañero/a y ayúdale a seguir hablando 🙌",
+    tip1:["💬","<b>Es una conversación, no una clase.</b> No corrijas, deja que fluya."],
+    tip2:["⏱️","<b>~30 min cada idioma.</b> Cambia de idioma cuando hayan pasado 30 minutos."],
+    tip3:["🤝","<b>No hay respuestas correctas.</b> Elige las preguntas que te gusten y salta el resto."],
+    ctaTitle:"¿Quieres aprender aún más rápido?",
+    ctaSub:"Si te apetece algo más estructurado, prueba una clase gratis con un profe profesional de PBC.",
+    ctaBtn:"Reserva tu clase gratis →",
+    footer:"PBC Languages · práctica de conversación"
+  },
+  fr:{
+    tagline:"Sujets de conversation",
+    chooseLevel:"Quel est ton niveau ?",
+    levelSub:"Choisis celui qui te convient. Tu peux le changer quand tu veux.",
+    chooseTopic:"Choisis un sujet",
+    topicSub:"Touche un sujet pour avoir des questions pour ta conversation.",
+    levels:{beginner:"Débutant",intermediate:"Intermédiaire",advanced:"Avancé"},
+    levelDesc:{beginner:"Questions simples du quotidien",intermediate:"Opinions et petites histoires",advanced:"Discussion ouverte et profonde"},
+    topicsBtn:"Sujets",
+    levelBtn:"Changer de niveau",
+    qhint:"Pose ces questions à ton partenaire et aide-le à continuer à parler 🙌",
+    tip1:["💬","<b>C'est une conversation, pas un cours.</b> Ne corrige pas, laisse couler."],
+    tip2:["⏱️","<b>~30 min par langue.</b> Change de langue une fois 30 minutes passées."],
+    tip3:["🤝","<b>Pas de bonnes réponses.</b> Choisis les questions qui te plaisent et saute les autres."],
+    ctaTitle:"Tu veux apprendre encore plus vite ?",
+    ctaSub:"Si tu veux quelque chose de plus structuré, essaie un cours gratuit avec un professeur professionnel de PBC.",
+    ctaBtn:"Réserve ton cours gratuit →",
+    footer:"PBC Languages · pratique de conversation"
+  },
+  de:{
+    tagline:"Gesprächsthemen",
+    chooseLevel:"Was ist dein Niveau?",
+    levelSub:"Wähle das, was zu dir passt. Du kannst es jederzeit ändern.",
+    chooseTopic:"Wähle ein Thema",
+    topicSub:"Tippe auf ein Thema, um Fragen für dein Gespräch zu bekommen.",
+    levels:{beginner:"Anfänger",intermediate:"Mittelstufe",advanced:"Fortgeschritten"},
+    levelDesc:{beginner:"Einfache Fragen für jeden Tag",intermediate:"Meinungen und kurze Geschichten",advanced:"Tiefe, offene Diskussion"},
+    topicsBtn:"Themen",
+    levelBtn:"Niveau ändern",
+    qhint:"Stell deinem Partner diese Fragen und hilf ihm, weiterzusprechen 🙌",
+    tip1:["💬","<b>Es ist ein Gespräch, kein Unterricht.</b> Nicht korrigieren, einfach reden lassen."],
+    tip2:["⏱️","<b>~30 Min. pro Sprache.</b> Wechsle die Sprache, wenn 30 Minuten vorbei sind."],
+    tip3:["🤝","<b>Keine richtigen Antworten.</b> Wähle die Fragen, die dir gefallen, und überspring den Rest."],
+    ctaTitle:"Willst du noch schneller lernen?",
+    ctaSub:"Wenn du etwas Strukturierteres möchtest, probiere eine kostenlose Stunde mit einer professionellen PBC-Lehrkraft.",
+    ctaBtn:"Buche deine kostenlose Stunde →",
+    footer:"PBC Languages · Konversationspraxis"
+  },
+  it:{
+    tagline:"Argomenti di conversazione",
+    chooseLevel:"Qual è il tuo livello?",
+    levelSub:"Scegli quello che senti più adatto. Puoi cambiarlo quando vuoi.",
+    chooseTopic:"Scegli un argomento",
+    topicSub:"Tocca un argomento per avere domande per la tua conversazione.",
+    levels:{beginner:"Principiante",intermediate:"Intermedio",advanced:"Avanzato"},
+    levelDesc:{beginner:"Domande semplici di tutti i giorni",intermediate:"Opinioni e piccole storie",advanced:"Discussione aperta e profonda"},
+    topicsBtn:"Argomenti",
+    levelBtn:"Cambia livello",
+    qhint:"Fai queste domande al tuo partner e aiutalo a continuare a parlare 🙌",
+    tip1:["💬","<b>È una conversazione, non una lezione.</b> Non correggere, lascia scorrere."],
+    tip2:["⏱️","<b>~30 min per lingua.</b> Cambia lingua una volta passati 30 minuti."],
+    tip3:["🤝","<b>Nessuna risposta giusta.</b> Scegli le domande che ti piacciono e salta le altre."],
+    ctaTitle:"Vuoi imparare ancora più in fretta?",
+    ctaSub:"Se vuoi qualcosa di più strutturato, prova una lezione gratis con un insegnante professionista di PBC.",
+    ctaBtn:"Prenota la tua lezione gratis →",
+    footer:"PBC Languages · pratica di conversazione"
+  }
+};
+
+const CTA_URL="https://app.pbclanguages.com/";
+function ctaHTML(){
+  const t=T[state.lang];
+  return `<a class="cta" href="${CTA_URL}" target="_blank" rel="noopener">
+    <div class="row"><span class="ic">🎓</span><b>${t.ctaTitle}</b></div>
+    <p>${t.ctaSub}</p>
+    <span class="cta-btn">${t.ctaBtn}</span>
+  </a>`;
+}
+
+/* ---------------- Content ---------------- */
+const LEVELS=[
+  {id:"beginner",emoji:"🌱",cls:"b"},
+  {id:"intermediate",emoji:"🌿",cls:"i"},
+  {id:"advanced",emoji:"🌳",cls:"a"}
+];
+
+const TOPICS=[
+  {id:"ice",emoji:"👋",name:{en:"Break the ice",es:"Romper el hielo",fr:"Briser la glace",de:"Das Eis brechen",it:"Rompere il ghiaccio"},q:{
+    beginner:{
+      en:["What's your name and where are you from?","How are you today?","What city do you live in?","Do you have any pets?","What do you do, work or study?","What's your favourite colour?"],
+      es:["¿Cómo te llamas y de dónde eres?","¿Cómo estás hoy?","¿En qué ciudad vives?","¿Tienes mascotas?","¿A qué te dedicas: trabajas o estudias?","¿Cuál es tu color favorito?"],
+      fr:["Comment tu t'appelles et d'où viens-tu ?","Comment vas-tu aujourd'hui ?","Dans quelle ville vis-tu ?","As-tu des animaux ?","Que fais-tu, tu travailles ou tu étudies ?","Quelle est ta couleur préférée ?"],
+      de:["Wie heißt du und woher kommst du?","Wie geht es dir heute?","In welcher Stadt wohnst du?","Hast du Haustiere?","Was machst du, arbeitest du oder studierst du?","Was ist deine Lieblingsfarbe?"],
+      it:["Come ti chiami e di dove sei?","Come stai oggi?","In che città vivi?","Hai animali domestici?","Cosa fai, lavori o studi?","Qual è il tuo colore preferito?"]},
+    intermediate:{
+      en:["Why are you learning this language?","What did you do last weekend?","What are you looking forward to this week?","How long have you been studying languages?","Tell me a fun fact about you.","If you had a free day tomorrow, what would you do?"],
+      es:["¿Por qué estás aprendiendo este idioma?","¿Qué hiciste el fin de semana pasado?","¿Qué te hace ilusión esta semana?","¿Cuánto tiempo llevas estudiando idiomas?","Cuéntame algo curioso sobre ti.","Si tuvieras un día libre mañana, ¿qué harías?"],
+      fr:["Pourquoi apprends-tu cette langue ?","Qu'as-tu fait le week-end dernier ?","Qu'est-ce qui te fait envie cette semaine ?","Depuis combien de temps étudies-tu les langues ?","Raconte-moi un fait amusant sur toi.","Si tu avais une journée libre demain, que ferais-tu ?"],
+      de:["Warum lernst du diese Sprache?","Was hast du letztes Wochenende gemacht?","Worauf freust du dich diese Woche?","Seit wann lernst du Sprachen?","Erzähl mir etwas Lustiges über dich.","Wenn du morgen einen freien Tag hättest, was würdest du machen?"],
+      it:["Perché stai imparando questa lingua?","Cosa hai fatto lo scorso fine settimana?","Cosa non vedi l'ora di fare questa settimana?","Da quanto tempo studi le lingue?","Raccontami una cosa curiosa su di te.","Se domani avessi un giorno libero, cosa faresti?"]},
+    advanced:{
+      en:["What's something most people don't know about you?","How would your friends describe your personality?","Is there an opinion you've completely changed over time?","If you could master any skill instantly, what would it be?","What does a 'good life' mean to you?","What small thing always makes your day better?"],
+      es:["¿Qué es algo que casi nadie sabe de ti?","¿Cómo describirían tu personalidad tus amigos?","¿Hay alguna opinión que hayas cambiado por completo con el tiempo?","Si pudieras dominar una habilidad al instante, ¿cuál sería?","¿Qué significa para ti una 'buena vida'?","¿Qué pequeña cosa te alegra siempre el día?"],
+      fr:["Quelle est une chose que la plupart des gens ignorent sur toi ?","Comment tes amis décriraient-ils ta personnalité ?","Y a-t-il une opinion que tu as complètement changée avec le temps ?","Si tu pouvais maîtriser une compétence instantanément, laquelle choisirais-tu ?","Que signifie une 'bonne vie' pour toi ?","Quelle petite chose améliore toujours ta journée ?"],
+      de:["Was wissen die meisten Menschen nicht über dich?","Wie würden deine Freunde deine Persönlichkeit beschreiben?","Gibt es eine Meinung, die du mit der Zeit komplett geändert hast?","Wenn du sofort eine Fähigkeit beherrschen könntest, welche wäre es?","Was bedeutet ein 'gutes Leben' für dich?","Welche kleine Sache macht deinen Tag immer besser?"],
+      it:["Qual è una cosa che quasi nessuno sa di te?","Come descriverebbero la tua personalità i tuoi amici?","C'è un'opinione che hai cambiato completamente con il tempo?","Se potessi padroneggiare un'abilità all'istante, quale sarebbe?","Cosa significa per te una 'vita buona'?","Quale piccola cosa ti migliora sempre la giornata?"]}
+  }},
+  {id:"travel",emoji:"✈️",name:{en:"Travel",es:"Viajes",fr:"Voyages",de:"Reisen",it:"Viaggi"},q:{
+    beginner:{
+      en:["Do you like travelling?","What countries have you visited?","Do you prefer the beach or the mountains?","How do you like to travel: by car, train or plane?","What's your favourite place in your country?","Where would you like to go on holiday?"],
+      es:["¿Te gusta viajar?","¿Qué países has visitado?","¿Prefieres la playa o la montaña?","¿Cómo te gusta viajar: en coche, tren o avión?","¿Cuál es tu lugar favorito de tu país?","¿A dónde te gustaría ir de vacaciones?"],
+      fr:["Aimes-tu voyager ?","Quels pays as-tu visités ?","Préfères-tu la plage ou la montagne ?","Comment aimes-tu voyager : en voiture, en train ou en avion ?","Quel est ton endroit préféré dans ton pays ?","Où aimerais-tu partir en vacances ?"],
+      de:["Reist du gern?","Welche Länder hast du besucht?","Magst du lieber den Strand oder die Berge?","Wie reist du gern: mit dem Auto, dem Zug oder dem Flugzeug?","Was ist dein Lieblingsort in deinem Land?","Wohin würdest du gern in den Urlaub fahren?"],
+      it:["Ti piace viaggiare?","Quali paesi hai visitato?","Preferisci il mare o la montagna?","Come ti piace viaggiare: in auto, in treno o in aereo?","Qual è il tuo posto preferito nel tuo paese?","Dove ti piacerebbe andare in vacanza?"]},
+    intermediate:{
+      en:["What's the best trip you've ever taken?","Do you prefer planning everything or being spontaneous?","Tell me about a place that surprised you.","What's one thing you always pack?","Have you ever had a travel disaster? What happened?","Would you rather travel alone or with people?"],
+      es:["¿Cuál es el mejor viaje que has hecho?","¿Prefieres planificarlo todo o ser espontáneo/a?","Háblame de un lugar que te sorprendió.","¿Qué es algo que siempre llevas en la maleta?","¿Has tenido alguna vez un desastre viajando? ¿Qué pasó?","¿Prefieres viajar solo/a o acompañado/a?"],
+      fr:["Quel est le meilleur voyage que tu aies fait ?","Préfères-tu tout planifier ou être spontané ?","Parle-moi d'un endroit qui t'a surpris.","Quelle est la chose que tu emportes toujours ?","As-tu déjà eu une catastrophe en voyage ? Que s'est-il passé ?","Préfères-tu voyager seul ou accompagné ?"],
+      de:["Was war die beste Reise, die du je gemacht hast?","Planst du lieber alles oder bist du spontan?","Erzähl mir von einem Ort, der dich überrascht hat.","Was packst du immer ein?","Hattest du schon mal eine Reisekatastrophe? Was ist passiert?","Reist du lieber allein oder mit anderen?"],
+      it:["Qual è il viaggio più bello che hai fatto?","Preferisci pianificare tutto o essere spontaneo?","Parlami di un posto che ti ha sorpreso.","Qual è una cosa che metti sempre in valigia?","Hai mai avuto un disastro in viaggio? Cosa è successo?","Preferisci viaggiare da solo o in compagnia?"]},
+    advanced:{
+      en:["Does travel really change people, or is that a myth?","What's the difference between a tourist and a traveller?","Is mass tourism helping or hurting the places we love?","Which culture has fascinated you the most, and why?","If you could live abroad for a year, where would it be?","Should there be limits on visiting fragile destinations?"],
+      es:["¿Viajar cambia de verdad a las personas o es un mito?","¿Qué diferencia hay entre un turista y un viajero?","¿El turismo masivo ayuda o perjudica a los lugares que amamos?","¿Qué cultura te ha fascinado más y por qué?","Si pudieras vivir un año en el extranjero, ¿dónde sería?","¿Debería haber límites para visitar destinos frágiles?"],
+      fr:["Voyager change-t-il vraiment les gens, ou est-ce un mythe ?","Quelle est la différence entre un touriste et un voyageur ?","Le tourisme de masse aide-t-il ou nuit-il aux lieux que nous aimons ?","Quelle culture t'a le plus fasciné, et pourquoi ?","Si tu pouvais vivre un an à l'étranger, où serait-ce ?","Devrait-il y avoir des limites pour visiter les destinations fragiles ?"],
+      de:["Verändert Reisen die Menschen wirklich, oder ist das ein Mythos?","Was ist der Unterschied zwischen einem Touristen und einem Reisenden?","Hilft der Massentourismus den Orten, die wir lieben, oder schadet er ihnen?","Welche Kultur hat dich am meisten fasziniert, und warum?","Wenn du ein Jahr im Ausland leben könntest, wo wäre das?","Sollte es Grenzen für den Besuch empfindlicher Reiseziele geben?"],
+      it:["Viaggiare cambia davvero le persone, o è un mito?","Qual è la differenza tra un turista e un viaggiatore?","Il turismo di massa aiuta o danneggia i posti che amiamo?","Quale cultura ti ha affascinato di più, e perché?","Se potessi vivere un anno all'estero, dove sarebbe?","Dovrebbero esserci limiti per visitare le destinazioni fragili?"]}
+  }},
+  {id:"food",emoji:"🍽️",name:{en:"Food & cooking",es:"Comida y cocina",fr:"Cuisine et nourriture",de:"Essen und Kochen",it:"Cibo e cucina"},q:{
+    beginner:{
+      en:["What's your favourite food?","Do you like cooking?","What did you have for breakfast today?","Do you prefer sweet or salty?","What's a typical dish from your country?","What food don't you like?"],
+      es:["¿Cuál es tu comida favorita?","¿Te gusta cocinar?","¿Qué desayunaste hoy?","¿Prefieres lo dulce o lo salado?","¿Cuál es un plato típico de tu país?","¿Qué comida no te gusta?"],
+      fr:["Quel est ton plat préféré ?","Aimes-tu cuisiner ?","Qu'as-tu mangé au petit-déjeuner aujourd'hui ?","Préfères-tu le sucré ou le salé ?","Quel est un plat typique de ton pays ?","Quel aliment n'aimes-tu pas ?"],
+      de:["Was ist dein Lieblingsessen?","Kochst du gern?","Was hast du heute zum Frühstück gegessen?","Magst du lieber Süßes oder Salziges?","Was ist ein typisches Gericht aus deinem Land?","Welches Essen magst du nicht?"],
+      it:["Qual è il tuo cibo preferito?","Ti piace cucinare?","Cosa hai mangiato a colazione oggi?","Preferisci il dolce o il salato?","Qual è un piatto tipico del tuo paese?","Quale cibo non ti piace?"]},
+    intermediate:{
+      en:["Who's the best cook in your family?","What's a dish you'd love to learn to make?","Do you eat out often or cook at home?","What's the strangest food you've ever tried?","Describe your perfect meal.","Has the way you eat changed over the years?"],
+      es:["¿Quién cocina mejor en tu familia?","¿Qué plato te encantaría aprender a hacer?","¿Comes fuera a menudo o cocinas en casa?","¿Cuál es la comida más rara que has probado?","Describe tu comida perfecta.","¿Ha cambiado tu forma de comer con los años?"],
+      fr:["Qui cuisine le mieux dans ta famille ?","Quel plat aimerais-tu apprendre à faire ?","Manges-tu souvent au restaurant ou cuisines-tu à la maison ?","Quel est l'aliment le plus étrange que tu aies goûté ?","Décris ton repas parfait.","Ta façon de manger a-t-elle changé au fil des années ?"],
+      de:["Wer kocht am besten in deiner Familie?","Welches Gericht würdest du gern kochen lernen?","Isst du oft auswärts oder kochst du zu Hause?","Was ist das seltsamste Essen, das du je probiert hast?","Beschreibe dein perfektes Essen.","Hat sich deine Art zu essen über die Jahre verändert?"],
+      it:["Chi cucina meglio nella tua famiglia?","Quale piatto ti piacerebbe imparare a fare?","Mangi spesso fuori o cucini a casa?","Qual è il cibo più strano che hai provato?","Descrivi il tuo pasto perfetto.","Il tuo modo di mangiare è cambiato negli anni?"]},
+    advanced:{
+      en:["Does food connect people better than language?","Do we eat in a healthier way today, or worse than before?","What does a country's cuisine say about its culture?","Could you ever go vegetarian or vegan? Why?","Are food traditions worth protecting in a globalised world?","What food memory takes you straight back to childhood?"],
+      es:["¿La comida une a las personas mejor que el idioma?","¿Comemos hoy de forma más sana o peor que antes?","¿Qué dice la gastronomía de un país sobre su cultura?","¿Podrías hacerte vegetariano/a o vegano/a? ¿Por qué?","¿Merece la pena proteger las tradiciones culinarias en un mundo globalizado?","¿Qué recuerdo de comida te lleva directo a tu infancia?"],
+      fr:["La nourriture rapproche-t-elle les gens mieux que la langue ?","Mangeons-nous plus sainement aujourd'hui, ou plus mal qu'avant ?","Que dit la cuisine d'un pays sur sa culture ?","Pourrais-tu devenir végétarien ou végan ? Pourquoi ?","Les traditions culinaires valent-elles la peine d'être protégées dans un monde globalisé ?","Quel souvenir lié à la nourriture te ramène directement à ton enfance ?"],
+      de:["Verbindet Essen Menschen besser als Sprache?","Essen wir heute gesünder oder schlechter als früher?","Was sagt die Küche eines Landes über seine Kultur aus?","Könntest du Vegetarier oder Veganer werden? Warum?","Lohnt es sich, Essenstraditionen in einer globalisierten Welt zu bewahren?","Welche Essenserinnerung bringt dich direkt in deine Kindheit zurück?"],
+      it:["Il cibo unisce le persone meglio della lingua?","Oggi mangiamo in modo più sano o peggio di prima?","Cosa dice la cucina di un paese sulla sua cultura?","Potresti mai diventare vegetariano o vegano? Perché?","Vale la pena proteggere le tradizioni culinarie in un mondo globalizzato?","Quale ricordo legato al cibo ti riporta dritto all'infanzia?"]}
+  }},
+  {id:"family",emoji:"👨‍👩‍👧",name:{en:"Family & friends",es:"Familia y amigos",fr:"Famille et amis",de:"Familie und Freunde",it:"Famiglia e amici"},q:{
+    beginner:{
+      en:["Do you have brothers or sisters?","Do you have a big or small family?","Who do you live with?","What's your best friend's name?","What do you like to do with your friends?","Do you see your family often?"],
+      es:["¿Tienes hermanos o hermanas?","¿Tienes una familia grande o pequeña?","¿Con quién vives?","¿Cómo se llama tu mejor amigo/a?","¿Qué te gusta hacer con tus amigos?","¿Ves a tu familia a menudo?"],
+      fr:["As-tu des frères ou des sœurs ?","As-tu une grande ou une petite famille ?","Avec qui vis-tu ?","Comment s'appelle ton meilleur ami ?","Qu'aimes-tu faire avec tes amis ?","Vois-tu ta famille souvent ?"],
+      de:["Hast du Geschwister?","Hast du eine große oder eine kleine Familie?","Mit wem wohnst du?","Wie heißt dein bester Freund?","Was machst du gern mit deinen Freunden?","Siehst du deine Familie oft?"],
+      it:["Hai fratelli o sorelle?","Hai una famiglia grande o piccola?","Con chi vivi?","Come si chiama il tuo migliore amico?","Cosa ti piace fare con i tuoi amici?","Vedi spesso la tua famiglia?"]},
+    intermediate:{
+      en:["Who are you closest to in your family?","How did you meet your best friend?","What traditions does your family have?","Are you similar to your parents?","In your opinion, what makes a good friend?","Tell me about a family member you admire."],
+      es:["¿Con quién tienes más confianza en tu familia?","¿Cómo conociste a tu mejor amigo/a?","¿Qué tradiciones tiene tu familia?","¿Te pareces a tus padres?","En tu opinión, ¿qué hace que alguien sea un buen amigo?","Háblame de un familiar al que admiras."],
+      fr:["De qui es-tu le plus proche dans ta famille ?","Comment as-tu rencontré ton meilleur ami ?","Quelles traditions a ta famille ?","Ressembles-tu à tes parents ?","Selon toi, qu'est-ce qui fait un bon ami ?","Parle-moi d'un membre de ta famille que tu admires."],
+      de:["Wem stehst du in deiner Familie am nächsten?","Wie hast du deinen besten Freund kennengelernt?","Welche Traditionen hat deine Familie?","Bist du deinen Eltern ähnlich?","Was macht deiner Meinung nach einen guten Freund aus?","Erzähl mir von einem Familienmitglied, das du bewunderst."],
+      it:["A chi sei più legato nella tua famiglia?","Come hai conosciuto il tuo migliore amico?","Quali tradizioni ha la tua famiglia?","Assomigli ai tuoi genitori?","Secondo te, cosa rende qualcuno un buon amico?","Parlami di un familiare che ammiri."]},
+    advanced:{
+      en:["Can friends become as close as family?","How has the idea of 'family' changed in your country?","Is it possible to stay close to friends as life gets busier?","What values did your family pass on to you?","Do we choose our friends, or do they just happen?","How do you keep a long-distance friendship alive?"],
+      es:["¿Pueden los amigos llegar a ser como la familia?","¿Cómo ha cambiado la idea de 'familia' en tu país?","¿Es posible mantener la amistad cuando la vida se complica?","¿Qué valores te transmitió tu familia?","¿Elegimos a nuestros amigos o simplemente aparecen?","¿Cómo se mantiene viva una amistad a distancia?"],
+      fr:["Les amis peuvent-ils devenir aussi proches que la famille ?","Comment l'idée de 'famille' a-t-elle changé dans ton pays ?","Est-il possible de rester proche de ses amis quand la vie devient plus chargée ?","Quelles valeurs ta famille t'a-t-elle transmises ?","Choisissons-nous nos amis, ou arrivent-ils simplement ?","Comment garde-t-on vivante une amitié à distance ?"],
+      de:["Können Freunde so eng werden wie Familie?","Wie hat sich die Idee von 'Familie' in deinem Land verändert?","Ist es möglich, Freunden nah zu bleiben, wenn das Leben voller wird?","Welche Werte hat dir deine Familie mitgegeben?","Suchen wir uns unsere Freunde aus, oder ergeben sie sich einfach?","Wie hält man eine Fernfreundschaft am Leben?"],
+      it:["Gli amici possono diventare uniti come la famiglia?","Come è cambiata l'idea di 'famiglia' nel tuo paese?","È possibile restare vicini agli amici quando la vita si fa più impegnata?","Quali valori ti ha trasmesso la tua famiglia?","Scegliamo i nostri amici, o capitano e basta?","Come si tiene viva un'amicizia a distanza?"]}
+  }},
+  {id:"hobbies",emoji:"🎨",name:{en:"Hobbies & free time",es:"Aficiones y tiempo libre",fr:"Loisirs et temps libre",de:"Hobbys und Freizeit",it:"Hobby e tempo libero"},q:{
+    beginner:{
+      en:["What do you do in your free time?","Do you play any sports?","Do you like music? What kind?","Do you read books?","What's your favourite day of the week?","Do you prefer staying home or going out?"],
+      es:["¿Qué haces en tu tiempo libre?","¿Practicas algún deporte?","¿Te gusta la música? ¿Qué tipo?","¿Lees libros?","¿Cuál es tu día favorito de la semana?","¿Prefieres quedarte en casa o salir?"],
+      fr:["Que fais-tu pendant ton temps libre ?","Pratiques-tu un sport ?","Aimes-tu la musique ? Quel genre ?","Lis-tu des livres ?","Quel est ton jour préféré de la semaine ?","Préfères-tu rester à la maison ou sortir ?"],
+      de:["Was machst du in deiner Freizeit?","Treibst du Sport?","Magst du Musik? Welche Art?","Liest du Bücher?","Was ist dein Lieblingstag der Woche?","Bleibst du lieber zu Hause oder gehst du lieber aus?"],
+      it:["Cosa fai nel tuo tempo libero?","Pratichi qualche sport?","Ti piace la musica? Che genere?","Leggi libri?","Qual è il tuo giorno preferito della settimana?","Preferisci stare a casa o uscire?"]},
+    intermediate:{
+      en:["What hobby would you like to start?","How did you get into your favourite hobby?","What do you do to relax after a hard day?","Is there a sport or activity you used to do but stopped?","How do you usually spend your weekends?","What's something you're really good at?"],
+      es:["¿Qué afición te gustaría empezar?","¿Cómo empezaste con tu hobby favorito?","¿Qué haces para relajarte después de un día duro?","¿Hay algún deporte o actividad que hacías y dejaste?","¿Cómo sueles pasar los fines de semana?","¿En qué se te da realmente bien?"],
+      fr:["Quel loisir aimerais-tu commencer ?","Comment as-tu commencé ton loisir préféré ?","Que fais-tu pour te détendre après une journée difficile ?","Y a-t-il un sport ou une activité que tu faisais et que tu as arrêté ?","Comment passes-tu d'habitude tes week-ends ?","Qu'est-ce que tu fais vraiment bien ?"],
+      de:["Welches Hobby würdest du gern anfangen?","Wie bist du zu deinem Lieblingshobby gekommen?","Was machst du, um dich nach einem harten Tag zu entspannen?","Gibt es einen Sport oder eine Aktivität, die du früher gemacht und aufgegeben hast?","Wie verbringst du normalerweise deine Wochenenden?","Worin bist du richtig gut?"],
+      it:["Quale hobby ti piacerebbe iniziare?","Come hai iniziato il tuo hobby preferito?","Cosa fai per rilassarti dopo una giornata dura?","C'è uno sport o un'attività che facevi e hai smesso?","Come passi di solito i tuoi fine settimana?","C'è qualcosa in cui sei davvero bravo?"]},
+    advanced:{
+      en:["Do we have less free time than past generations, or just use it differently?","Is it better to have one big passion or many interests?","Can a hobby become too serious to still be fun?","Why do you think people get so attached to their hobbies?","Has technology improved or ruined our free time?","If money were no object, how would you spend your days?"],
+      es:["¿Tenemos menos tiempo libre que antes o solo lo usamos distinto?","¿Es mejor tener una gran pasión o muchos intereses?","¿Puede un hobby volverse tan serio que deje de ser divertido?","¿Por qué crees que la gente se engancha tanto a sus aficiones?","¿La tecnología ha mejorado o arruinado nuestro tiempo libre?","Si el dinero no importara, ¿cómo pasarías tus días?"],
+      fr:["Avons-nous moins de temps libre que les générations passées, ou l'utilisons-nous simplement autrement ?","Vaut-il mieux avoir une grande passion ou beaucoup d'intérêts ?","Un loisir peut-il devenir trop sérieux pour rester un plaisir ?","Pourquoi penses-tu que les gens s'attachent autant à leurs loisirs ?","La technologie a-t-elle amélioré ou gâché notre temps libre ?","Si l'argent n'était pas un problème, comment passerais-tu tes journées ?"],
+      de:["Haben wir weniger Freizeit als frühere Generationen, oder nutzen wir sie nur anders?","Ist es besser, eine große Leidenschaft oder viele Interessen zu haben?","Kann ein Hobby zu ernst werden, um noch Spaß zu machen?","Warum hängen Menschen deiner Meinung nach so an ihren Hobbys?","Hat die Technik unsere Freizeit verbessert oder ruiniert?","Wenn Geld keine Rolle spielte, wie würdest du deine Tage verbringen?"],
+      it:["Abbiamo meno tempo libero delle generazioni passate, o lo usiamo solo in modo diverso?","È meglio avere una grande passione o tanti interessi?","Un hobby può diventare troppo serio per restare divertente?","Perché pensi che le persone si affezionino così tanto ai loro hobby?","La tecnologia ha migliorato o rovinato il nostro tempo libero?","Se i soldi non fossero un problema, come passeresti le tue giornate?"]}
+  }},
+  {id:"work",emoji:"💼",name:{en:"Work & studies",es:"Trabajo y estudios",fr:"Travail et études",de:"Arbeit und Studium",it:"Lavoro e studi"},q:{
+    beginner:{
+      en:["Do you work or study?","What's your job, or what do you study?","Do you like your work or studies?","What time do you start in the morning?","Do you work from home or in an office?","What did you want to be as a child?"],
+      es:["¿Trabajas o estudias?","¿En qué trabajas o qué estudias?","¿Te gusta tu trabajo o tus estudios?","¿A qué hora empiezas por la mañana?","¿Trabajas desde casa o en una oficina?","¿Qué querías ser de pequeño/a?"],
+      fr:["Travailles-tu ou étudies-tu ?","Quel est ton métier, ou qu'étudies-tu ?","Aimes-tu ton travail ou tes études ?","À quelle heure commences-tu le matin ?","Travailles-tu à la maison ou au bureau ?","Que voulais-tu être quand tu étais enfant ?"],
+      de:["Arbeitest du oder studierst du?","Was ist dein Beruf, oder was studierst du?","Magst du deine Arbeit oder dein Studium?","Wann fängst du morgens an?","Arbeitest du von zu Hause oder im Büro?","Was wolltest du als Kind werden?"],
+      it:["Lavori o studi?","Qual è il tuo lavoro, o cosa studi?","Ti piace il tuo lavoro o i tuoi studi?","A che ora inizi la mattina?","Lavori da casa o in ufficio?","Cosa volevi fare da bambino?"]},
+    intermediate:{
+      en:["What's the best part of your job or studies?","What's the most challenging part?","How did you choose your career or field?","Would you ever change jobs completely?","What skills are you trying to improve?","Describe your ideal job."],
+      es:["¿Qué es lo mejor de tu trabajo o tus estudios?","¿Qué es lo más difícil?","¿Cómo elegiste tu carrera o tu campo?","¿Cambiarías de trabajo por completo alguna vez?","¿Qué habilidades estás intentando mejorar?","Describe tu trabajo ideal."],
+      fr:["Quelle est la meilleure partie de ton travail ou de tes études ?","Quelle est la partie la plus difficile ?","Comment as-tu choisi ta carrière ou ton domaine ?","Changerais-tu un jour complètement de métier ?","Quelles compétences essaies-tu d'améliorer ?","Décris ton travail idéal."],
+      de:["Was ist der beste Teil deiner Arbeit oder deines Studiums?","Was ist der schwierigste Teil?","Wie hast du deinen Beruf oder dein Fachgebiet gewählt?","Würdest du jemals den Beruf komplett wechseln?","Welche Fähigkeiten versuchst du zu verbessern?","Beschreibe deinen idealen Job."],
+      it:["Qual è la parte migliore del tuo lavoro o dei tuoi studi?","Qual è la parte più difficile?","Come hai scelto la tua carriera o il tuo campo?","Cambieresti mai lavoro completamente?","Quali competenze stai cercando di migliorare?","Descrivi il tuo lavoro ideale."]},
+    advanced:{
+      en:["Is work-life balance realistic, or just a nice idea?","Should you follow your passion or follow the money?","How is technology changing the jobs of the future?","Is remote work better for us, or are we losing something?","What does 'success' really mean to you?","Would you rather have a stable job or your own business?"],
+      es:["¿El equilibrio entre vida y trabajo es realista o solo una idea bonita?","¿Hay que seguir la pasión o seguir el dinero?","¿Cómo está cambiando la tecnología los trabajos del futuro?","¿El teletrabajo es mejor para nosotros o estamos perdiendo algo?","¿Qué significa de verdad el 'éxito' para ti?","¿Preferirías un trabajo estable o tu propio negocio?"],
+      fr:["L'équilibre entre vie privée et travail est-il réaliste, ou juste une jolie idée ?","Faut-il suivre sa passion ou suivre l'argent ?","Comment la technologie change-t-elle les métiers du futur ?","Le télétravail est-il meilleur pour nous, ou perdons-nous quelque chose ?","Que signifie vraiment le 'succès' pour toi ?","Préférerais-tu un emploi stable ou ta propre entreprise ?"],
+      de:["Ist die Work-Life-Balance realistisch, oder nur eine schöne Idee?","Soll man seiner Leidenschaft folgen oder dem Geld?","Wie verändert die Technik die Jobs der Zukunft?","Ist Homeoffice besser für uns, oder verlieren wir etwas?","Was bedeutet 'Erfolg' wirklich für dich?","Hättest du lieber einen sicheren Job oder dein eigenes Unternehmen?"],
+      it:["L'equilibrio tra vita e lavoro è realistico, o solo una bella idea?","Bisogna seguire la passione o seguire i soldi?","Come sta cambiando la tecnologia i lavori del futuro?","Il lavoro da remoto è meglio per noi, o stiamo perdendo qualcosa?","Cosa significa davvero il 'successo' per te?","Preferiresti un lavoro stabile o un'attività tutta tua?"]}
+  }},
+  {id:"media",emoji:"🎬",name:{en:"Movies, music & series",es:"Cine, música y series",fr:"Films, musique et séries",de:"Filme, Musik und Serien",it:"Film, musica e serie"},q:{
+    beginner:{
+      en:["What's your favourite movie?","What kind of music do you like?","Do you watch series? Which one?","Who's your favourite singer or band?","Do you prefer films or series?","What did you watch last night?"],
+      es:["¿Cuál es tu película favorita?","¿Qué tipo de música te gusta?","¿Ves series? ¿Cuál?","¿Quién es tu cantante o grupo favorito?","¿Prefieres películas o series?","¿Qué viste anoche?"],
+      fr:["Quel est ton film préféré ?","Quel genre de musique aimes-tu ?","Regardes-tu des séries ? Laquelle ?","Quel est ton chanteur ou ton groupe préféré ?","Préfères-tu les films ou les séries ?","Qu'as-tu regardé hier soir ?"],
+      de:["Was ist dein Lieblingsfilm?","Welche Art von Musik magst du?","Schaust du Serien? Welche?","Wer ist dein Lieblingssänger oder deine Lieblingsband?","Magst du lieber Filme oder Serien?","Was hast du gestern Abend geschaut?"],
+      it:["Qual è il tuo film preferito?","Che tipo di musica ti piace?","Guardi le serie? Quale?","Chi è il tuo cantante o gruppo preferito?","Preferisci i film o le serie?","Cosa hai guardato ieri sera?"]},
+    intermediate:{
+      en:["What's a series everyone should watch?","Has a movie ever made you cry?","What song always puts you in a good mood?","Do you prefer the cinema or watching at home?","Is there a film you've watched many times?","What are you watching right now?"],
+      es:["¿Qué serie debería ver todo el mundo?","¿Alguna película te ha hecho llorar?","¿Qué canción te pone siempre de buen humor?","¿Prefieres el cine o ver pelis en casa?","¿Hay alguna película que hayas visto muchas veces?","¿Qué estás viendo ahora mismo?"],
+      fr:["Quelle série tout le monde devrait-il regarder ?","Un film t'a-t-il déjà fait pleurer ?","Quelle chanson te met toujours de bonne humeur ?","Préfères-tu le cinéma ou regarder à la maison ?","Y a-t-il un film que tu as vu de nombreuses fois ?","Qu'est-ce que tu regardes en ce moment ?"],
+      de:["Welche Serie sollte jeder gesehen haben?","Hat dich ein Film schon mal zum Weinen gebracht?","Welches Lied bringt dich immer in gute Laune?","Magst du lieber das Kino oder zu Hause schauen?","Gibt es einen Film, den du viele Male gesehen hast?","Was schaust du gerade?"],
+      it:["Quale serie dovrebbero vedere tutti?","Un film ti ha mai fatto piangere?","Quale canzone ti mette sempre di buon umore?","Preferisci il cinema o guardare a casa?","C'è un film che hai visto tante volte?","Cosa stai guardando in questo momento?"]},
+    advanced:{
+      en:["Can a film actually change the way you see the world?","Are streaming platforms making us watch more but enjoy less?","Does music sound better in a language you understand?","Why do we love stories so much?","Is today's cinema more about art or about money?","Should classics be remade, or left alone?"],
+      es:["¿Puede una película cambiar de verdad cómo ves el mundo?","¿Las plataformas nos hacen ver más pero disfrutar menos?","¿La música suena mejor en un idioma que entiendes?","¿Por qué nos encantan tanto las historias?","¿El cine de hoy es más arte o más negocio?","¿Los clásicos deberían rehacerse o dejarse como están?"],
+      fr:["Un film peut-il vraiment changer ta façon de voir le monde ?","Les plateformes de streaming nous font-elles regarder plus mais apprécier moins ?","La musique sonne-t-elle mieux dans une langue que tu comprends ?","Pourquoi aimons-nous autant les histoires ?","Le cinéma d'aujourd'hui est-il plus une question d'art ou d'argent ?","Faut-il refaire les classiques, ou les laisser tranquilles ?"],
+      de:["Kann ein Film wirklich verändern, wie du die Welt siehst?","Bringen uns Streaming-Plattformen dazu, mehr zu schauen, aber weniger zu genießen?","Klingt Musik besser in einer Sprache, die du verstehst?","Warum lieben wir Geschichten so sehr?","Geht es im heutigen Kino mehr um Kunst oder um Geld?","Sollte man Klassiker neu verfilmen oder in Ruhe lassen?"],
+      it:["Un film può davvero cambiare il modo in cui vedi il mondo?","Le piattaforme di streaming ci fanno guardare di più ma godere di meno?","La musica suona meglio in una lingua che capisci?","Perché amiamo così tanto le storie?","Il cinema di oggi è più arte o più soldi?","I classici andrebbero rifatti, o lasciati stare?"]}
+  }},
+  {id:"culture",emoji:"🌍",name:{en:"Culture & traditions",es:"Cultura y tradiciones",fr:"Culture et traditions",de:"Kultur und Traditionen",it:"Cultura e tradizioni"},q:{
+    beginner:{
+      en:["What's a famous festival in your country?","What's a typical food at celebrations?","How do you celebrate your birthday?","What's your favourite holiday?","Do people dance at parties where you live?","What language(s) do you speak?"],
+      es:["¿Cuál es una fiesta famosa de tu país?","¿Qué comida típica hay en las celebraciones?","¿Cómo celebras tu cumpleaños?","¿Cuál es tu fiesta favorita?","¿La gente baila en las fiestas de tu zona?","¿Qué idioma(s) hablas?"],
+      fr:["Quelle est une fête célèbre dans ton pays ?","Quel est un plat typique des célébrations ?","Comment fêtes-tu ton anniversaire ?","Quelle est ta fête préférée ?","Les gens dansent-ils aux fêtes là où tu vis ?","Quelle(s) langue(s) parles-tu ?"],
+      de:["Was ist ein berühmtes Fest in deinem Land?","Was ist ein typisches Essen bei Feiern?","Wie feierst du deinen Geburtstag?","Was ist dein Lieblingsfeiertag?","Tanzen die Leute auf Festen, wo du wohnst?","Welche Sprache(n) sprichst du?"],
+      it:["Qual è una festa famosa nel tuo paese?","Qual è un cibo tipico delle celebrazioni?","Come festeggi il tuo compleanno?","Qual è la tua festa preferita?","La gente balla alle feste dove vivi?","Che lingua/e parli?"]},
+    intermediate:{
+      en:["What tradition from your culture are you most proud of?","Is there a custom that surprises foreigners?","How do people usually greet each other where you're from?","What holiday do you wish other countries had?","Have any traditions been lost over time?","What would you show a visitor to your country first?"],
+      es:["¿Qué tradición de tu cultura te enorgullece más?","¿Hay alguna costumbre que sorprenda a los extranjeros?","¿Cómo se saluda la gente normalmente en tu zona?","¿Qué fiesta te gustaría que tuvieran otros países?","¿Se han perdido algunas tradiciones con el tiempo?","¿Qué le enseñarías primero a alguien que visita tu país?"],
+      fr:["De quelle tradition de ta culture es-tu le plus fier ?","Y a-t-il une coutume qui surprend les étrangers ?","Comment les gens se saluent-ils d'habitude là d'où tu viens ?","Quelle fête aimerais-tu que d'autres pays aient ?","Des traditions se sont-elles perdues avec le temps ?","Que montrerais-tu d'abord à quelqu'un qui visite ton pays ?"],
+      de:["Auf welche Tradition deiner Kultur bist du am stolzesten?","Gibt es einen Brauch, der Ausländer überrascht?","Wie begrüßen sich die Menschen normalerweise dort, wo du herkommst?","Welchen Feiertag wünschst du dir für andere Länder?","Sind im Laufe der Zeit Traditionen verloren gegangen?","Was würdest du einem Besucher deines Landes zuerst zeigen?"],
+      it:["Di quale tradizione della tua cultura sei più orgoglioso?","C'è un'usanza che sorprende gli stranieri?","Come si salutano di solito le persone da dove vieni?","Quale festa vorresti che avessero anche altri paesi?","Si sono perse alcune tradizioni con il tempo?","Cosa mostreresti per primo a chi visita il tuo paese?"]},
+    advanced:{
+      en:["Does globalisation make cultures richer, or more similar?","Should some traditions change with the times?","How much does your culture shape who you are?","Can you truly understand a culture without speaking its language?","What stereotype about your country is completely wrong?","What could your culture teach the rest of the world?"],
+      es:["¿La globalización hace las culturas más ricas o más parecidas?","¿Deberían algunas tradiciones cambiar con los tiempos?","¿Cuánto te define tu cultura como persona?","¿Se puede entender de verdad una cultura sin hablar su idioma?","¿Qué estereotipo sobre tu país es totalmente falso?","¿Qué podría enseñarle tu cultura al resto del mundo?"],
+      fr:["La mondialisation rend-elle les cultures plus riches, ou plus semblables ?","Certaines traditions devraient-elles changer avec le temps ?","À quel point ta culture façonne-t-elle qui tu es ?","Peut-on vraiment comprendre une culture sans parler sa langue ?","Quel stéréotype sur ton pays est complètement faux ?","Que pourrait enseigner ta culture au reste du monde ?"],
+      de:["Macht die Globalisierung Kulturen reicher oder ähnlicher?","Sollten sich manche Traditionen mit der Zeit ändern?","Wie sehr prägt deine Kultur, wer du bist?","Kann man eine Kultur wirklich verstehen, ohne ihre Sprache zu sprechen?","Welches Klischee über dein Land ist völlig falsch?","Was könnte deine Kultur dem Rest der Welt beibringen?"],
+      it:["La globalizzazione rende le culture più ricche, o più simili?","Alcune tradizioni dovrebbero cambiare con i tempi?","Quanto la tua cultura definisce chi sei?","Si può capire davvero una cultura senza parlarne la lingua?","Quale stereotipo sul tuo paese è completamente sbagliato?","Cosa potrebbe insegnare la tua cultura al resto del mondo?"]}
+  }}
+];
+
+/* ---------------- State + render ---------------- */
+const state={lang:"en",level:null,topic:null};
+const app=document.getElementById("app");
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function buildLangBar(){
+  document.getElementById("langSel").innerHTML=LANGS.map(l=>
+    `<button type="button" data-l="${l.code}" aria-label="${l.code}" onclick="setLang('${l.code}')"><span class="fl">${l.flag}</span>${l.label}</button>`
+  ).join("");
+}
+
+function setLang(l){
+  state.lang=l;
+  document.documentElement.lang=l;
+  document.querySelectorAll("#langSel button").forEach(b=>b.classList.toggle("on",b.dataset.l===l));
+  document.getElementById("tagline").textContent=T[l].tagline;
+  document.getElementById("footText").textContent=T[l].footer;
+  render();
+}
+
+function render(){
+  if(state.topic) return renderQuestions();
+  if(state.level) return renderTopics();
+  return renderLevels();
+}
+
+function renderLevels(){
+  const t=T[state.lang];
+  app.innerHTML=`<div class="screen">
+    <h1 class="title">${t.chooseLevel}</h1>
+    <p class="sub">${t.levelSub}</p>
+    <div class="grid">
+      ${LEVELS.map(l=>`<button class="card level ${l.cls}" onclick="pickLevel('${l.id}')">
+        <span class="emoji">${l.emoji}</span>
+        <span class="txt"><b>${t.levels[l.id]}</b><span>${t.levelDesc[l.id]}</span></span>
+        <span class="arrow">›</span>
+      </button>`).join("")}
+    </div>
+    <div class="tips">
+      ${[t.tip1,t.tip2,t.tip3].map(x=>`<div class="tip"><span>${x[0]}</span><span>${x[1]}</span></div>`).join("")}
+    </div>
+    ${ctaHTML()}
+  </div>`;
+}
+
+function renderTopics(){
+  const t=T[state.lang];
+  app.innerHTML=`<div class="screen">
+    <button class="backbtn" onclick="goLevels()">‹ ${t.levelBtn}</button>
+    <h1 class="title">${t.chooseTopic}</h1>
+    <p class="sub">${t.topicSub} · <b>${t.levels[state.level]}</b></p>
+    <div class="grid topics">
+      ${TOPICS.map(tp=>`<button class="card topic" onclick="pickTopic('${tp.id}')">
+        <span class="emoji">${tp.emoji}</span><b>${esc(tp.name[state.lang])}</b>
+      </button>`).join("")}
+    </div>
+  </div>`;
+}
+
+function renderQuestions(){
+  const t=T[state.lang];
+  const tp=TOPICS.find(x=>x.id===state.topic);
+  const qs=tp.q[state.level][state.lang];
+  app.innerHTML=`<div class="screen">
+    <button class="backbtn" onclick="goTopics()">‹ ${t.topicsBtn}</button>
+    <div class="qhead">
+      <div class="row"><span class="ico">${tp.emoji}</span><h2>${esc(tp.name[state.lang])}</h2></div>
+      <span class="chip">${t.levels[state.level]}</span>
+    </div>
+    <p class="qhint"><span>${t.qhint}</span></p>
+    <ol class="q">${qs.map(q=>`<li>${esc(q)}</li>`).join("")}</ol>
+    <div class="footnav">
+      <button onclick="goTopics()">↩︎ ${t.topicsBtn}</button>
+      <button class="primary" onclick="goLevels()">${t.levelBtn}</button>
+    </div>
+    ${ctaHTML()}
+  </div>`;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function pickLevel(id){state.level=id;render()}
+function pickTopic(id){state.topic=id;render()}
+function goLevels(){state.level=null;state.topic=null;render()}
+function goTopics(){state.topic=null;render()}
+
+/* init: detect browser language among the 5, else English */
+function detectLang(){
+  const n=(navigator.language||navigator.userLanguage||"en").slice(0,2).toLowerCase();
+  return SUPPORTED.includes(n)?n:"en";
+}
+buildLangBar();
+setLang(detectLang());
+</script>
+</body>
+</html>
