@@ -52,7 +52,7 @@
   }
   .bar{display:flex;align-items:center;justify-content:space-between;gap:12px}
   .brand{display:flex;align-items:center;gap:10px;min-width:0}
-  .logo{height:34px;width:auto;display:block;flex:none}
+  .logo{height:40px;width:auto;display:block;flex:none}
   .tagline{
     color:rgba(255,255,255,.92);font-size:12px;font-weight:600;line-height:1.15;
     border-left:1px solid rgba(255,255,255,.4);padding-left:10px;
@@ -140,6 +140,29 @@
   .tip{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 13px}
   .tip b{color:var(--ink);font-weight:700}
 
+  /* Schedule + timezones */
+  .sched{margin-top:22px;background:linear-gradient(135deg,#ffffff,var(--blue-soft));
+    border:1px solid #d4e3ff;border-radius:var(--radius);padding:15px 16px;box-shadow:var(--shadow-sm)}
+  .sched .row{display:flex;align-items:flex-start;gap:9px;margin-bottom:9px}
+  .sched .ic{font-size:20px;flex:none;line-height:1.2}
+  .sched b{font-size:14.5px;font-weight:700;line-height:1.3}
+  .sched .zones{display:flex;flex-wrap:wrap;gap:6px}
+  .sched .zone{font-size:11.5px;font-weight:600;color:var(--blue);background:#fff;
+    border:1px solid #d4e3ff;border-radius:999px;padding:3px 9px;white-space:nowrap}
+
+  /* Action link buttons (meeting room / organize) */
+  .linkbtn{display:flex;align-items:center;gap:12px;width:100%;text-decoration:none;margin-top:11px;
+    border-radius:15px;padding:14px 16px;transition:transform .08s ease,box-shadow .15s ease;box-shadow:var(--shadow-sm)}
+  .linkbtn:active{transform:scale(.99)}
+  .linkbtn .bic{font-size:22px;flex:none}
+  .linkbtn .btxt{flex:1;min-width:0}
+  .linkbtn .btxt b{display:block;font-size:15px;font-weight:700;line-height:1.2}
+  .linkbtn .btxt span{display:block;font-size:12px;font-weight:500;opacity:.85;margin-top:2px}
+  .linkbtn .arr{font-size:18px;flex:none;opacity:.7}
+  .linkbtn.meet{background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(0,102,255,.3)}
+  .linkbtn.org{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .linkbtn.org .bic{color:var(--blue)}
+
   /* Free-class CTA: brand pill */
   .cta{display:block;text-decoration:none;color:var(--ink);margin-top:20px;
     background:linear-gradient(135deg,#ffffff,var(--blue-soft));
@@ -196,7 +219,13 @@ const T = {
     tip3:["🤝","<b>No right answers.</b> Pick the questions you like and skip the rest."],
     ctaTitle:"Want to learn even faster?",
     ctaSub:"If you'd like something more structured, try a free class with a professional PBC teacher.",
-    ctaBtn:"Book your free class →"
+    ctaBtn:"Book your free class →",
+    schedTitle:"Free language exchanges every Tuesday & Thursday at 6pm Madrid time",
+    zones:["6pm Madrid","5pm London","12pm New York","9am Los Angeles","11am Bogotá","10am Mexico City","1pm Buenos Aires","2am Sydney +1"],
+    meetTitle:"Join the meeting room",
+    meetSub:"Every Tuesday & Thursday, 6pm Madrid",
+    orgTitle:"Organize your own tandems",
+    orgSub:"Set up your own on the PBC website"
   },
   es:{
     tagline:"Temas de conversación",
@@ -215,11 +244,19 @@ const T = {
     tip3:["🤝","<b>No hay respuestas correctas.</b> Elige las preguntas que te gusten y salta el resto."],
     ctaTitle:"¿Quieres aprender aún más rápido?",
     ctaSub:"Si te apetece algo más estructurado, prueba una clase gratis con un profe profesional de PBC.",
-    ctaBtn:"Reserva tu clase gratis →"
+    ctaBtn:"Reserva tu clase gratis →",
+    schedTitle:"Intercambios gratuitos cada martes y jueves a las 18:00 (hora de Madrid)",
+    zones:["18:00 Madrid","17:00 Londres","12:00 Nueva York","09:00 Los Ángeles","11:00 Bogotá","10:00 Ciudad de México","13:00 Buenos Aires","02:00 Sídney +1"],
+    meetTitle:"Entrar a la sala de reunión",
+    meetSub:"Cada martes y jueves, 18:00 Madrid",
+    orgTitle:"Organiza tus propios tándems",
+    orgSub:"Crea los tuyos en la web de PBC"
   }
 };
 
 const CTA_URL="https://app.pbclanguages.com/";
+const MEET_URL="https://meet.google.com/btn-asdm-pmi";
+const ORG_URL="https://app.pbclanguages.com/tandems/";
 function ctaHTML(){
   const t=T[state.lang];
   return `<a class="cta" href="${CTA_URL}" target="_blank" rel="noopener">
@@ -227,6 +264,21 @@ function ctaHTML(){
     <p>${t.ctaSub}</p>
     <span class="cta-btn">${t.ctaBtn}</span>
   </a>`;
+}
+function footerBlock(){
+  const t=T[state.lang];
+  return `
+    <div class="sched">
+      <div class="row"><span class="ic">🗓️</span><b>${esc(t.schedTitle)}</b></div>
+      <div class="zones">${t.zones.map(z=>`<span class="zone">${esc(z)}</span>`).join("")}</div>
+    </div>
+    <a class="linkbtn meet" href="${MEET_URL}" target="_blank" rel="noopener">
+      <span class="bic">🎥</span><span class="btxt"><b>${esc(t.meetTitle)}</b><span>${esc(t.meetSub)}</span></span><span class="arr">→</span>
+    </a>
+    <a class="linkbtn org" href="${ORG_URL}" target="_blank" rel="noopener">
+      <span class="bic">🤝</span><span class="btxt"><b>${esc(t.orgTitle)}</b><span>${esc(t.orgSub)}</span></span><span class="arr">›</span>
+    </a>
+    ${ctaHTML()}`;
 }
 
 /* ---------------- Content ---------------- */
@@ -362,7 +414,7 @@ function renderLevels(){
     <div class="tips">
       ${[t.tip1,t.tip2,t.tip3].map(x=>`<div class="tip"><span>${x[0]}</span><span>${x[1]}</span></div>`).join("")}
     </div>
-    ${ctaHTML()}
+    ${footerBlock()}
   </div>`;
 }
 
@@ -396,7 +448,7 @@ function renderQuestions(){
       <button onclick="goTopics()">↩︎ ${t.topicsBtn}</button>
       <button class="primary" onclick="goLevels()">${t.levelBtn}</button>
     </div>
-    ${ctaHTML()}
+    ${footerBlock()}
   </div>`;
   window.scrollTo({top:0,behavior:"smooth"});
 }
