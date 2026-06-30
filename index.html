@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#4f46e5" />
+<title>PBC Tandem · Conversation topics</title>
+<style>
+  :root{
+    --bg:#f5f6fb;
+    --card:#ffffff;
+    --ink:#1e2233;
+    --muted:#6b7185;
+    --line:#e7e9f2;
+    --brand:#4f46e5;
+    --brand-2:#6366f1;
+    --brand-soft:#eef0ff;
+    --accent:#f97316;
+    --accent-soft:#fff3e8;
+    --green:#10b981;
+    --radius:18px;
+    --shadow:0 8px 24px rgba(40,44,80,.10);
+    --shadow-sm:0 2px 8px rgba(40,44,80,.07);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:0 16px 48px;min-height:100dvh}
+
+  /* Header */
+  header{
+    position:sticky;top:0;z-index:10;
+    background:rgba(245,246,251,.92);
+    backdrop-filter:saturate(180%) blur(8px);
+    padding:14px 0 10px;
+    margin-bottom:6px;
+  }
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.2px}
+  .logo .dot{
+    width:30px;height:30px;border-radius:9px;
+    background:linear-gradient(135deg,var(--brand),var(--brand-2));
+    color:#fff;display:grid;place-items:center;font-size:15px;box-shadow:var(--shadow-sm)
+  }
+  .logo b{font-size:16px}
+  .logo small{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:-2px}
+
+  /* Language toggle */
+  .lang{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px;box-shadow:var(--shadow-sm)}
+  .lang button{
+    border:0;background:transparent;font:inherit;font-weight:700;font-size:13px;
+    padding:7px 12px;border-radius:999px;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:5px
+  }
+  .lang button.on{background:var(--brand);color:#fff;box-shadow:var(--shadow-sm)}
+
+  /* Screen transitions */
+  .screen{animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  h1.title{font-size:23px;margin:6px 2px 2px;letter-spacing:-.4px}
+  p.sub{color:var(--muted);margin:0 2px 18px;font-size:14.5px}
+
+  /* Cards */
+  .grid{display:grid;gap:12px}
+  .grid.topics{grid-template-columns:1fr 1fr}
+  .card{
+    appearance:none;width:100%;text-align:left;font:inherit;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow-sm);transition:transform .08s ease,box-shadow .15s ease,border-color .15s ease;
+  }
+  .card:active{transform:scale(.985)}
+  .card:hover{box-shadow:var(--shadow);border-color:#d8dbef}
+
+  /* Level cards */
+  .level{display:flex;align-items:center;gap:14px;padding:16px 16px}
+  .level .emoji{font-size:26px;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;flex:none}
+  .level.b .emoji{background:#e8f7f0}
+  .level.i .emoji{background:var(--brand-soft)}
+  .level.a .emoji{background:var(--accent-soft)}
+  .level .txt b{font-size:17px;display:block}
+  .level .txt span{font-size:13px;color:var(--muted)}
+  .level .arrow{margin-left:auto;color:#c4c8db;font-size:20px;flex:none}
+
+  /* Topic cards */
+  .topic{padding:16px 12px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-height:104px;justify-content:center}
+  .topic .emoji{font-size:30px}
+  .topic b{font-size:15px;line-height:1.2}
+
+  /* Questions */
+  .qhead{
+    background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;
+    border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:14px
+  }
+  .qhead .row{display:flex;align-items:center;gap:10px}
+  .qhead .ico{font-size:26px}
+  .qhead h2{margin:0;font-size:20px;letter-spacing:-.3px}
+  .chip{display:inline-block;font-size:12px;font-weight:700;background:rgba(255,255,255,.22);padding:3px 10px;border-radius:999px;margin-top:8px}
+  .qhint{font-size:13px;color:var(--muted);margin:0 2px 12px;display:flex;gap:7px;align-items:flex-start}
+
+  ol.q{list-style:none;counter-reset:q;margin:0;padding:0;display:grid;gap:10px}
+  ol.q li{
+    counter-increment:q;background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px 14px 50px;position:relative;font-size:16px;box-shadow:var(--shadow-sm)
+  }
+  ol.q li::before{
+    content:counter(q);position:absolute;left:12px;top:13px;
+    width:26px;height:26px;border-radius:8px;background:var(--brand-soft);color:var(--brand);
+    font-size:13px;font-weight:800;display:grid;place-items:center
+  }
+
+  /* Buttons / nav */
+  .backbtn{
+    appearance:none;border:0;background:transparent;font:inherit;font-weight:700;color:var(--brand);
+    cursor:pointer;padding:8px 4px;font-size:14.5px;display:inline-flex;align-items:center;gap:6px;margin:2px 0 8px
+  }
+  .footnav{display:flex;gap:10px;margin-top:20px}
+  .footnav button{
+    flex:1;appearance:none;font:inherit;font-weight:700;cursor:pointer;border-radius:13px;padding:13px;font-size:14.5px;
+    border:1px solid var(--line);background:#fff;color:var(--ink);box-shadow:var(--shadow-sm)
+  }
+  .footnav button.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+  /* Tips */
+  .tips{margin-top:24px;display:grid;gap:9px}
+  .tip{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:12px;padding:11px 13px}
+  .tip b{color:var(--ink);font-weight:700}
+
+  footer{margin-top:26px;text-align:center;font-size:12px;color:#aab0c4}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="bar">
+      <div class="logo">
+        <span class="dot">🗣️</span>
+        <span><b>PBC Tandem</b><small id="tagline">Conversation topics</small></span>
+      </div>
+      <div class="lang" role="group" aria-label="Language">
+        <button id="langEn" onclick="setLang('en')">🇬🇧 EN</button>
+        <button id="langEs" onclick="setLang('es')">🇪🇸 ES</button>
+      </div>
+    </div>
+  </header>
+  <main id="app"></main>
+  <footer>PBC Languages · free language exchange</footer>
+</div>
+
+<script>
+/* ---------------- UI strings ---------------- */
+const T = {
+  en:{
+    tagline:"Conversation topics",
+    chooseLevel:"What's your level?",
+    levelSub:"Pick the one that feels right — you can change it any time.",
+    chooseTopic:"Choose a topic",
+    topicSub:"Tap a topic to get questions for your conversation.",
+    levels:{beginner:"Beginner",intermediate:"Intermediate",advanced:"Advanced"},
+    levelDesc:{beginner:"Simple, everyday questions",intermediate:"Opinions and short stories",advanced:"Deep, open discussion"},
+    back:"Back",
+    topicsBtn:"Topics",
+    levelBtn:"Change level",
+    qhint:"Ask your partner these questions and help them keep talking 🙌",
+    tip1:["💬","<b>It's a conversation, not a class.</b> Don't correct — just keep it flowing."],
+    tip2:["⏱️","<b>~30 min each language.</b> Swap to the other language when the host says."],
+    tip3:["🤝","<b>No right answers.</b> Pick the questions you like and skip the rest."]
+  },
+  es:{
+    tagline:"Temas de conversación",
+    chooseLevel:"¿Cuál es tu nivel?",
+    levelSub:"Elige el que te encaje — puedes cambiarlo cuando quieras.",
+    chooseTopic:"Elige un tema",
+    topicSub:"Toca un tema para ver preguntas para tu conversación.",
+    levels:{beginner:"Principiante",intermediate:"Intermedio",advanced:"Avanzado"},
+    levelDesc:{beginner:"Preguntas sencillas del día a día",intermediate:"Opiniones y pequeñas historias",advanced:"Debate abierto y profundo"},
+    back:"Atrás",
+    topicsBtn:"Temas",
+    levelBtn:"Cambiar nivel",
+    qhint:"Hazle estas preguntas a tu compañero/a y ayúdale a seguir hablando 🙌",
+    tip1:["💬","<b>Es una conversación, no una clase.</b> No corrijas — deja que fluya."],
+    tip2:["⏱️","<b>~30 min cada idioma.</b> Cambia al otro idioma cuando lo diga el anfitrión."],
+    tip3:["🤝","<b>No hay respuestas correctas.</b> Elige las preguntas que te gusten y salta el resto."]
+  }
+};
+
+/* ---------------- Content ---------------- */
+const LEVELS=[
+  {id:"beginner",emoji:"🌱",cls:"b"},
+  {id:"intermediate",emoji:"🌿",cls:"i"},
+  {id:"advanced",emoji:"🌳",cls:"a"}
+];
+
+const TOPICS=[
+  {id:"ice",emoji:"👋",name:{en:"Break the ice",es:"Romper el hielo"},q:{
+    beginner:{
+      en:["What's your name and where are you from?","How are you today?","What city do you live in?","Do you have any pets?","What do you do — work or study?","What's your favourite colour?"],
+      es:["¿Cómo te llamas y de dónde eres?","¿Cómo estás hoy?","¿En qué ciudad vives?","¿Tienes mascotas?","¿A qué te dedicas: trabajas o estudias?","¿Cuál es tu color favorito?"]},
+    intermediate:{
+      en:["Why are you learning this language?","What did you do last weekend?","What are you looking forward to this week?","How long have you been studying languages?","Tell me a fun fact about you.","If you had a free day tomorrow, what would you do?"],
+      es:["¿Por qué estás aprendiendo este idioma?","¿Qué hiciste el fin de semana pasado?","¿Qué te hace ilusión esta semana?","¿Cuánto tiempo llevas estudiando idiomas?","Cuéntame algo curioso sobre ti.","Si tuvieras un día libre mañana, ¿qué harías?"]},
+    advanced:{
+      en:["What's something most people don't know about you?","How would your friends describe your personality?","Is there an opinion you've completely changed over time?","If you could master any skill instantly, what would it be?","What does a 'good life' mean to you?","What small thing always makes your day better?"],
+      es:["¿Qué es algo que casi nadie sabe de ti?","¿Cómo describirían tu personalidad tus amigos?","¿Hay alguna opinión que hayas cambiado por completo con el tiempo?","Si pudieras dominar una habilidad al instante, ¿cuál sería?","¿Qué significa para ti una 'buena vida'?","¿Qué pequeña cosa te alegra siempre el día?"]}
+  }},
+  {id:"travel",emoji:"✈️",name:{en:"Travel",es:"Viajes"},q:{
+    beginner:{
+      en:["Do you like travelling?","What countries have you visited?","Do you prefer the beach or the mountains?","How do you like to travel — car, train or plane?","What's your favourite place in your country?","Where would you like to go on holiday?"],
+      es:["¿Te gusta viajar?","¿Qué países has visitado?","¿Prefieres la playa o la montaña?","¿Cómo te gusta viajar: en coche, tren o avión?","¿Cuál es tu lugar favorito de tu país?","¿A dónde te gustaría ir de vacaciones?"]},
+    intermediate:{
+      en:["What's the best trip you've ever taken?","Do you prefer planning everything or being spontaneous?","Tell me about a place that surprised you.","What's one thing you always pack?","Have you ever had a travel disaster? What happened?","Would you rather travel alone or with people?"],
+      es:["¿Cuál es el mejor viaje que has hecho?","¿Prefieres planificarlo todo o ser espontáneo/a?","Háblame de un lugar que te sorprendió.","¿Qué es algo que siempre llevas en la maleta?","¿Has tenido alguna vez un desastre viajando? ¿Qué pasó?","¿Prefieres viajar solo/a o acompañado/a?"]},
+    advanced:{
+      en:["Does travel really change people, or is that a myth?","What's the difference between a tourist and a traveller?","Is mass tourism helping or hurting the places we love?","Which culture has fascinated you the most, and why?","If you could live abroad for a year, where would it be?","Should there be limits on visiting fragile destinations?"],
+      es:["¿Viajar cambia de verdad a las personas o es un mito?","¿Qué diferencia hay entre un turista y un viajero?","¿El turismo masivo ayuda o perjudica a los lugares que amamos?","¿Qué cultura te ha fascinado más y por qué?","Si pudieras vivir un año en el extranjero, ¿dónde sería?","¿Debería haber límites para visitar destinos frágiles?"]}
+  }},
+  {id:"food",emoji:"🍽️",name:{en:"Food & cooking",es:"Comida y cocina"},q:{
+    beginner:{
+      en:["What's your favourite food?","Do you like cooking?","What did you have for breakfast today?","Do you prefer sweet or salty?","What's a typical dish from your country?","What food don't you like?"],
+      es:["¿Cuál es tu comida favorita?","¿Te gusta cocinar?","¿Qué desayunaste hoy?","¿Prefieres lo dulce o lo salado?","¿Cuál es un plato típico de tu país?","¿Qué comida no te gusta?"]},
+    intermediate:{
+      en:["Who's the best cook in your family?","What's a dish you'd love to learn to make?","Do you eat out often or cook at home?","What's the strangest food you've ever tried?","Describe your perfect meal.","Has the way you eat changed over the years?"],
+      es:["¿Quién cocina mejor en tu familia?","¿Qué plato te encantaría aprender a hacer?","¿Comes fuera a menudo o cocinas en casa?","¿Cuál es la comida más rara que has probado?","Describe tu comida perfecta.","¿Ha cambiado tu forma de comer con los años?"]},
+    advanced:{
+      en:["Does food connect people better than language?","Do we eat in a healthier way today, or worse than before?","What does a country's cuisine say about its culture?","Could you ever go vegetarian or vegan? Why?","Are food traditions worth protecting in a globalised world?","What food memory takes you straight back to childhood?"],
+      es:["¿La comida une a las personas mejor que el idioma?","¿Comemos hoy de forma más sana o peor que antes?","¿Qué dice la gastronomía de un país sobre su cultura?","¿Podrías hacerte vegetariano/a o vegano/a? ¿Por qué?","¿Merece la pena proteger las tradiciones culinarias en un mundo globalizado?","¿Qué recuerdo de comida te lleva directo a tu infancia?"]}
+  }},
+  {id:"family",emoji:"👨‍👩‍👧",name:{en:"Family & friends",es:"Familia y amigos"},q:{
+    beginner:{
+      en:["Do you have brothers or sisters?","Do you have a big or small family?","Who do you live with?","What's your best friend's name?","What do you like to do with your friends?","Do you see your family often?"],
+      es:["¿Tienes hermanos o hermanas?","¿Tienes una familia grande o pequeña?","¿Con quién vives?","¿Cómo se llama tu mejor amigo/a?","¿Qué te gusta hacer con tus amigos?","¿Ves a tu familia a menudo?"]},
+    intermediate:{
+      en:["Who are you closest to in your family?","How did you meet your best friend?","What traditions does your family have?","Are you similar to your parents?","In your opinion, what makes a good friend?","Tell me about a family member you admire."],
+      es:["¿Con quién tienes más confianza en tu familia?","¿Cómo conociste a tu mejor amigo/a?","¿Qué tradiciones tiene tu familia?","¿Te pareces a tus padres?","En tu opinión, ¿qué hace que alguien sea un buen amigo?","Háblame de un familiar al que admiras."]},
+    advanced:{
+      en:["Can friends become as close as family?","How has the idea of 'family' changed in your country?","Is it possible to stay close to friends as life gets busier?","What values did your family pass on to you?","Do we choose our friends, or do they just happen?","How do you keep a long-distance friendship alive?"],
+      es:["¿Pueden los amigos llegar a ser como la familia?","¿Cómo ha cambiado la idea de 'familia' en tu país?","¿Es posible mantener la amistad cuando la vida se complica?","¿Qué valores te transmitió tu familia?","¿Elegimos a nuestros amigos o simplemente aparecen?","¿Cómo se mantiene viva una amistad a distancia?"]}
+  }},
+  {id:"hobbies",emoji:"🎨",name:{en:"Hobbies & free time",es:"Aficiones y tiempo libre"},q:{
+    beginner:{
+      en:["What do you do in your free time?","Do you play any sports?","Do you like music? What kind?","Do you read books?","What's your favourite day of the week?","Do you prefer staying home or going out?"],
+      es:["¿Qué haces en tu tiempo libre?","¿Practicas algún deporte?","¿Te gusta la música? ¿Qué tipo?","¿Lees libros?","¿Cuál es tu día favorito de la semana?","¿Prefieres quedarte en casa o salir?"]},
+    intermediate:{
+      en:["What hobby would you like to start?","How did you get into your favourite hobby?","What do you do to relax after a hard day?","Is there a sport or activity you used to do but stopped?","How do you usually spend your weekends?","What's something you're really good at?"],
+      es:["¿Qué afición te gustaría empezar?","¿Cómo empezaste con tu hobby favorito?","¿Qué haces para relajarte después de un día duro?","¿Hay algún deporte o actividad que hacías y dejaste?","¿Cómo sueles pasar los fines de semana?","¿En qué se te da realmente bien?"]},
+    advanced:{
+      en:["Do we have less free time than past generations, or just use it differently?","Is it better to have one big passion or many interests?","Can a hobby become too serious to still be fun?","Why do you think people get so attached to their hobbies?","Has technology improved or ruined our free time?","If money were no object, how would you spend your days?"],
+      es:["¿Tenemos menos tiempo libre que antes o solo lo usamos distinto?","¿Es mejor tener una gran pasión o muchos intereses?","¿Puede un hobby volverse tan serio que deje de ser divertido?","¿Por qué crees que la gente se engancha tanto a sus aficiones?","¿La tecnología ha mejorado o arruinado nuestro tiempo libre?","Si el dinero no importara, ¿cómo pasarías tus días?"]}
+  }},
+  {id:"work",emoji:"💼",name:{en:"Work & studies",es:"Trabajo y estudios"},q:{
+    beginner:{
+      en:["Do you work or study?","What's your job, or what do you study?","Do you like your work or studies?","What time do you start in the morning?","Do you work from home or in an office?","What did you want to be as a child?"],
+      es:["¿Trabajas o estudias?","¿En qué trabajas o qué estudias?","¿Te gusta tu trabajo o tus estudios?","¿A qué hora empiezas por la mañana?","¿Trabajas desde casa o en una oficina?","¿Qué querías ser de pequeño/a?"]},
+    intermediate:{
+      en:["What's the best part of your job or studies?","What's the most challenging part?","How did you choose your career or field?","Would you ever change jobs completely?","What skills are you trying to improve?","Describe your ideal job."],
+      es:["¿Qué es lo mejor de tu trabajo o tus estudios?","¿Qué es lo más difícil?","¿Cómo elegiste tu carrera o tu campo?","¿Cambiarías de trabajo por completo alguna vez?","¿Qué habilidades estás intentando mejorar?","Describe tu trabajo ideal."]},
+    advanced:{
+      en:["Is work-life balance realistic, or just a nice idea?","Should you follow your passion or follow the money?","How is technology changing the jobs of the future?","Is remote work better for us, or are we losing something?","What does 'success' really mean to you?","Would you rather have a stable job or your own business?"],
+      es:["¿El equilibrio entre vida y trabajo es realista o solo una idea bonita?","¿Hay que seguir la pasión o seguir el dinero?","¿Cómo está cambiando la tecnología los trabajos del futuro?","¿El teletrabajo es mejor para nosotros o estamos perdiendo algo?","¿Qué significa de verdad el 'éxito' para ti?","¿Preferirías un trabajo estable o tu propio negocio?"]}
+  }},
+  {id:"media",emoji:"🎬",name:{en:"Movies, music & series",es:"Cine, música y series"},q:{
+    beginner:{
+      en:["What's your favourite movie?","What kind of music do you like?","Do you watch series? Which one?","Who's your favourite singer or band?","Do you prefer films or series?","What did you watch last night?"],
+      es:["¿Cuál es tu película favorita?","¿Qué tipo de música te gusta?","¿Ves series? ¿Cuál?","¿Quién es tu cantante o grupo favorito?","¿Prefieres películas o series?","¿Qué viste anoche?"]},
+    intermediate:{
+      en:["What's a series everyone should watch?","Has a movie ever made you cry?","What song always puts you in a good mood?","Do you prefer the cinema or watching at home?","Is there a film you've watched many times?","What are you watching right now?"],
+      es:["¿Qué serie debería ver todo el mundo?","¿Alguna película te ha hecho llorar?","¿Qué canción te pone siempre de buen humor?","¿Prefieres el cine o ver pelis en casa?","¿Hay alguna película que hayas visto muchas veces?","¿Qué estás viendo ahora mismo?"]},
+    advanced:{
+      en:["Can a film actually change the way you see the world?","Are streaming platforms making us watch more but enjoy less?","Does music sound better in a language you understand?","Why do we love stories so much?","Is today's cinema more about art or about money?","Should classics be remade, or left alone?"],
+      es:["¿Puede una película cambiar de verdad cómo ves el mundo?","¿Las plataformas nos hacen ver más pero disfrutar menos?","¿La música suena mejor en un idioma que entiendes?","¿Por qué nos encantan tanto las historias?","¿El cine de hoy es más arte o más negocio?","¿Los clásicos deberían rehacerse o dejarse como están?"]}
+  }},
+  {id:"culture",emoji:"🌍",name:{en:"Culture & traditions",es:"Cultura y tradiciones"},q:{
+    beginner:{
+      en:["What's a famous festival in your country?","What's a typical food at celebrations?","How do you celebrate your birthday?","What's your favourite holiday?","Do people dance at parties where you live?","What language(s) do you speak?"],
+      es:["¿Cuál es una fiesta famosa de tu país?","¿Qué comida típica hay en las celebraciones?","¿Cómo celebras tu cumpleaños?","¿Cuál es tu fiesta favorita?","¿La gente baila en las fiestas de tu zona?","¿Qué idioma(s) hablas?"]},
+    intermediate:{
+      en:["What tradition from your culture are you most proud of?","Is there a custom that surprises foreigners?","How do people usually greet each other where you're from?","What holiday do you wish other countries had?","Have any traditions been lost over time?","What would you show a visitor to your country first?"],
+      es:["¿Qué tradición de tu cultura te enorgullece más?","¿Hay alguna costumbre que sorprenda a los extranjeros?","¿Cómo se saluda la gente normalmente en tu zona?","¿Qué fiesta te gustaría que tuvieran otros países?","¿Se han perdido algunas tradiciones con el tiempo?","¿Qué le enseñarías primero a alguien que visita tu país?"]},
+    advanced:{
+      en:["Does globalisation make cultures richer, or more similar?","Should some traditions change with the times?","How much does your culture shape who you are?","Can you truly understand a culture without speaking its language?","What stereotype about your country is completely wrong?","What could your culture teach the rest of the world?"],
+      es:["¿La globalización hace las culturas más ricas o más parecidas?","¿Deberían algunas tradiciones cambiar con los tiempos?","¿Cuánto te define tu cultura como persona?","¿Se puede entender de verdad una cultura sin hablar su idioma?","¿Qué estereotipo sobre tu país es totalmente falso?","¿Qué podría enseñarle tu cultura al resto del mundo?"]}
+  }}
+];
+
+/* ---------------- State + render ---------------- */
+const state={lang:"en",level:null,topic:null};
+const app=document.getElementById("app");
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function setLang(l){
+  state.lang=l;
+  document.documentElement.lang=l;
+  document.getElementById("langEn").classList.toggle("on",l==="en");
+  document.getElementById("langEs").classList.toggle("on",l==="es");
+  document.getElementById("tagline").textContent=T[l].tagline;
+  render();
+}
+
+function render(){
+  if(state.topic) return renderQuestions();
+  if(state.level) return renderTopics();
+  return renderLevels();
+}
+
+function renderLevels(){
+  const t=T[state.lang];
+  app.innerHTML=`<div class="screen">
+    <h1 class="title">${t.chooseLevel}</h1>
+    <p class="sub">${t.levelSub}</p>
+    <div class="grid">
+      ${LEVELS.map(l=>`<button class="card level ${l.cls}" onclick="pickLevel('${l.id}')">
+        <span class="emoji">${l.emoji}</span>
+        <span class="txt"><b>${t.levels[l.id]}</b><span>${t.levelDesc[l.id]}</span></span>
+        <span class="arrow">›</span>
+      </button>`).join("")}
+    </div>
+    <div class="tips">
+      ${[t.tip1,t.tip2,t.tip3].map(x=>`<div class="tip"><span>${x[0]}</span><span>${x[1]}</span></div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function renderTopics(){
+  const t=T[state.lang];
+  app.innerHTML=`<div class="screen">
+    <button class="backbtn" onclick="goLevels()">‹ ${t.levelBtn}</button>
+    <h1 class="title">${t.chooseTopic}</h1>
+    <p class="sub">${t.topicSub} · <b>${t.levels[state.level]}</b></p>
+    <div class="grid topics">
+      ${TOPICS.map(tp=>`<button class="card topic" onclick="pickTopic('${tp.id}')">
+        <span class="emoji">${tp.emoji}</span><b>${esc(tp.name[state.lang])}</b>
+      </button>`).join("")}
+    </div>
+  </div>`;
+}
+
+function renderQuestions(){
+  const t=T[state.lang];
+  const tp=TOPICS.find(x=>x.id===state.topic);
+  const qs=tp.q[state.level][state.lang];
+  app.innerHTML=`<div class="screen">
+    <button class="backbtn" onclick="goTopics()">‹ ${t.topicsBtn}</button>
+    <div class="qhead">
+      <div class="row"><span class="ico">${tp.emoji}</span><h2>${esc(tp.name[state.lang])}</h2></div>
+      <span class="chip">${t.levels[state.level]}</span>
+    </div>
+    <p class="qhint"><span>${t.qhint}</span></p>
+    <ol class="q">${qs.map(q=>`<li>${esc(q)}</li>`).join("")}</ol>
+    <div class="footnav">
+      <button onclick="goTopics()">↩︎ ${t.topicsBtn}</button>
+      <button class="primary" onclick="goLevels()">${t.levelBtn}</button>
+    </div>
+  </div>`;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function pickLevel(id){state.level=id;render()}
+function pickTopic(id){state.topic=id;render()}
+function goLevels(){state.level=null;state.topic=null;render()}
+function goTopics(){state.topic=null;render()}
+
+/* init: detect browser language */
+setLang((navigator.language||"en").toLowerCase().startsWith("es")?"es":"en");
+</script>
+</body>
+</html>
