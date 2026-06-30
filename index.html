@@ -131,6 +131,20 @@
   .tip{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:12px;padding:11px 13px}
   .tip b{color:var(--ink);font-weight:700}
 
+  /* Free-class CTA */
+  .cta{display:block;text-decoration:none;color:var(--ink);margin-top:18px;
+    background:linear-gradient(135deg,#ffffff,var(--accent-soft));
+    border:1px solid #ffd9bd;border-radius:var(--radius);padding:15px 16px;box-shadow:var(--shadow-sm);
+    transition:transform .08s ease,box-shadow .15s ease}
+  .cta:active{transform:scale(.99)}
+  .cta:hover{box-shadow:var(--shadow)}
+  .cta .row{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .cta .ic{font-size:22px;flex:none}
+  .cta b{font-size:15px;letter-spacing:-.2px}
+  .cta p{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.4}
+  .cta .cta-btn{display:block;text-align:center;background:var(--accent);color:#fff;
+    font-weight:800;padding:12px;border-radius:12px;font-size:14.5px;box-shadow:var(--shadow-sm)}
+
   footer{margin-top:26px;text-align:center;font-size:12px;color:#aab0c4}
 </style>
 </head>
@@ -169,7 +183,10 @@ const T = {
     qhint:"Ask your partner these questions and help them keep talking 🙌",
     tip1:["💬","<b>It's a conversation, not a class.</b> Don't correct — just keep it flowing."],
     tip2:["⏱️","<b>~30 min each language.</b> Swap to the other language when the host says."],
-    tip3:["🤝","<b>No right answers.</b> Pick the questions you like and skip the rest."]
+    tip3:["🤝","<b>No right answers.</b> Pick the questions you like and skip the rest."],
+    ctaTitle:"Want to learn even faster?",
+    ctaSub:"If you'd like something more structured, try a free class with a professional PBC teacher.",
+    ctaBtn:"Book your free class →"
   },
   es:{
     tagline:"Temas de conversación",
@@ -185,9 +202,22 @@ const T = {
     qhint:"Hazle estas preguntas a tu compañero/a y ayúdale a seguir hablando 🙌",
     tip1:["💬","<b>Es una conversación, no una clase.</b> No corrijas — deja que fluya."],
     tip2:["⏱️","<b>~30 min cada idioma.</b> Cambia al otro idioma cuando lo diga el anfitrión."],
-    tip3:["🤝","<b>No hay respuestas correctas.</b> Elige las preguntas que te gusten y salta el resto."]
+    tip3:["🤝","<b>No hay respuestas correctas.</b> Elige las preguntas que te gusten y salta el resto."],
+    ctaTitle:"¿Quieres aprender aún más rápido?",
+    ctaSub:"Si te apetece algo más estructurado, prueba una clase gratis con un profe profesional de PBC.",
+    ctaBtn:"Reserva tu clase gratis →"
   }
 };
+
+const CTA_URL="https://app.pbclanguages.com/";
+function ctaHTML(){
+  const t=T[state.lang];
+  return `<a class="cta" href="${CTA_URL}" target="_blank" rel="noopener">
+    <div class="row"><span class="ic">🎓</span><b>${t.ctaTitle}</b></div>
+    <p>${t.ctaSub}</p>
+    <span class="cta-btn">${t.ctaBtn}</span>
+  </a>`;
+}
 
 /* ---------------- Content ---------------- */
 const LEVELS=[
@@ -322,6 +352,7 @@ function renderLevels(){
     <div class="tips">
       ${[t.tip1,t.tip2,t.tip3].map(x=>`<div class="tip"><span>${x[0]}</span><span>${x[1]}</span></div>`).join("")}
     </div>
+    ${ctaHTML()}
   </div>`;
 }
 
@@ -355,6 +386,7 @@ function renderQuestions(){
       <button onclick="goTopics()">↩︎ ${t.topicsBtn}</button>
       <button class="primary" onclick="goLevels()">${t.levelBtn}</button>
     </div>
+    ${ctaHTML()}
   </div>`;
   window.scrollTo({top:0,behavior:"smooth"});
 }
